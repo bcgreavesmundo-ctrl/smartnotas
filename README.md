@@ -1,11 +1,66 @@
-# Sample Snack app
+# 📱 SmartNotas — Sistema de Gestión Académica Móvil
 
-Open the `App.js` file to start writing some code. You can preview the changes directly on your phone or tablet by scanning the **QR code** or use the iOS or Android emulators. When you're done, click **Save** and share the link!
+> **Proyecto Académico / MVP**  
+> **Desarrollador:** [Tu Nombre Completo]  
+> **Tecnologías:** React Native • Expo • Supabase (PostgreSQL)  
 
-When you're ready to see everything that Expo provides (or if you want to use your own editor) you can **Download** your project and use it with [expo cli](https://docs.expo.dev/get-started/installation/#expo-cli)).
+---
 
-All projects created in Snack are publicly available, so you can easily share the link to this project via link, or embed it on a web page with the `<>` button.
+## 📄 Descripción General
 
-If you're having problems, you can tweet to us [@expo](https://twitter.com/expo) or ask in our [forums](https://forums.expo.dev/c/expo-dev-tools/61) or [Discord](https://chat.expo.dev/).
+**SmartNotas** es una aplicación móvil diseñada para centralizar y automatizar el control de calificaciones y la gestión académica universitaria. Permite un flujo transparente entre coordinadores, profesores y estudiantes mediante un sistema de control de acceso basado en roles (RBAC).
 
-Snack is Open Source. You can find the code on the [GitHub repo](https://github.com/expo/snack).
+---
+
+## 🚀 Tecnologías Utilizadas
+
+* **Frontend:** React Native (Expo SDK)
+* **Navegación:** React Navigation (Stack Navigator)
+* **Backend como Servicio (BaaS):** Supabase
+* **Base de Datos:** PostgreSQL (con Row-Level Security / RLS)
+* **Control de Versiones:** Git & GitHub Desktop
+
+---
+
+## 👥 Módulos y Funcionalidades Principales
+
+### 🛠️ 1. Módulo Coordinador
+- **Gestión de Usuarios:** Creación y administración de perfiles (Coordinadores, Profesores y Estudiantes).
+- **Gestión de Asignaturas:** Alta, edición y eliminación de materias, con asignación de carga docente y créditos académicos.
+
+### 👨‍🏫 2. Módulo Profesor
+- **Carga Académica:** Visualización de asignaturas asignadas en el período activo.
+- **Gestión de Notas:** Registro y actualización por estudiante organizados en tres cortes evaluativos:
+  - **Corte 1:** 30%
+  - **Corte 2:** 30%
+  - **Corte 3:** 40%
+
+### 🎓 3. Módulo Estudiante
+- **Dashboard Académico:** Métricas consolidadas de promedio general acumulado y total de materias inscritas.
+- **Historial de Calificaciones:** Consulta detallada de rendimiento individual por asignatura y corte con indicador visual de aprobación ($\ge 3.0$).
+
+---
+
+## 📊 Modelo de Base de Datos (Supabase)
+
+El sistema utiliza tres tablas relacionales optimizadas:
+
+1. **`usuarios`**: `id`, `nombre`, `correo`, `rol` ('Coordinador' | 'Profesor' | 'Estudiante'), `carrera`.
+2. **`asignaturas`**: `id`, `nombre`, `codigo`, `creditos`, `profesor_id` (FK $\rightarrow$ `usuarios.id`).
+3. **`calificaciones`**: `id`, `estudiante_id` (FK $\rightarrow$ `usuarios.id`), `asignatura_id` (FK $\rightarrow$ `asignaturas.id`), `nota1`, `nota2`, `nota3`.
+
+---
+
+## ⚙️ Configuración e Instalación Local
+
+### Prerrequisitos
+- Node.js (v18+)
+- Expo Go en dispositivo móvil o emulador Android/iOS
+- Cuenta en Supabase
+
+### Pasos para ejecutar:
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/bcgreavesmundo-ctrl/smartnotas.git](https://github.com/bcgreavesmundo-ctrl/smartnotas.git)
+   cd smartnotas
