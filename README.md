@@ -1,7 +1,6 @@
 # 📱 SmartNotas — Sistema de Gestión Académica Móvil
 
 > **Proyecto Académico / MVP**  
-> **Desarrollador:** [Tu Nombre Completo]  
 > **Tecnologías:** React Native • Expo • Supabase (PostgreSQL)  
 
 ---
@@ -18,7 +17,7 @@
 * **Navegación:** React Navigation (Stack Navigator)
 * **Backend como Servicio (BaaS):** Supabase
 * **Base de Datos:** PostgreSQL (con Row-Level Security / RLS)
-* **Control de Versiones:** Git & GitHub Desktop
+* **Control de Versiones:** Git & GitHub
 
 ---
 
@@ -51,16 +50,49 @@ El sistema utiliza tres tablas relacionales optimizadas:
 
 ---
 
-## ⚙️ Configuración e Instalación Local
+## ⚙️ Guía de Instalación y Ejecución Local
 
-### Prerrequisitos
-- Node.js (v18+)
-- Expo Go en dispositivo móvil o emulador Android/iOS
-- Cuenta en Supabase
+Sigue estos pasos para clonar y ejecutar el proyecto en tu entorno local.
 
-### Pasos para ejecutar:
+### 📋 Prerrequisitos
+- [Node.js](https://nodejs.org/) (v18 o superior).
+- **Expo CLI (Última versión):** Se recomienda utilizar siempre la versión más reciente del ecosistema Expo ejecutando los comandos con `npx` (o instalándola globalmente mediante `npm install -g expo-cli`).
+- **Expo Go App (Última versión en el móvil):** Aplicación móvil **Expo Go** instalada en tu dispositivo (Android/iOS). *Por defecto, la versión que descargas directamente desde la Play Store o App Store siempre corresponde a la última versión estable requerida.*
+- [Git](https://git-scm.com/) instalado en el sistema.
+- Una cuenta y proyecto activo en [Supabase](https://supabase.com/).
+
+---
+
+### 📥 Pasos para la instalación:
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone [https://github.com/bcgreavesmundo-ctrl/smartnotas.git](https://github.com/bcgreavesmundo-ctrl/smartnotas.git)
+   git clone https://github.com/bcgreavesmundo-ctrl/smartnotas.git
    cd smartnotas
+   ```
+
+2. **Instalar dependencias del proyecto:**
+   ```bash
+   npm install
+   ```
+
+3. **Configurar las variables de entorno:**
+   Crea un archivo llamado `.env` en la raíz del proyecto y agrega las credenciales de tu proyecto de Supabase:
+   ```env
+   EXPO_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=tu_publishable_key_aqui
+   ```
+   *(Obtén la URL y la Publishable Key en el panel de Supabase $\rightarrow$ **Project Settings** $\rightarrow$ **API Keys**).*
+
+4. **Iniciar el servidor de desarrollo:**
+   ```bash
+   npx expo start --clear
+   ```
+
+5. **Probar la aplicación:**
+   Escanea el código QR generado en la terminal utilizando la aplicación **Expo Go** actualizada en tu dispositivo móvil.
+
+---
+
+## ✒️ Licencia & Autoría
+Proyecto desarrollado como MVP para la materia Desarrollo de Aplicaciones Moviles. UNICIENCIA 
