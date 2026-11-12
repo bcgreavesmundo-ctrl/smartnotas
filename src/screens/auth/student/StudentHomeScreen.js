@@ -39,6 +39,7 @@ export default function StudentHomeScreen({ route, navigation }) {
       setCargando(false);
     }
   };
+
   const handleLogout = () => {
     Alert.alert(
       'Cerrar Sesión',
@@ -49,6 +50,7 @@ export default function StudentHomeScreen({ route, navigation }) {
       ]
     );
   };
+
   const notasDefinitivas = materias.filter(m => m.definitiva !== null && m.definitiva !== undefined).map(m => m.definitiva);
   const promedio = notasDefinitivas.length > 0 
     ? (notasDefinitivas.reduce((a, b) => a + b, 0) / notasDefinitivas.length).toFixed(1)
@@ -58,7 +60,8 @@ export default function StudentHomeScreen({ route, navigation }) {
   const riesgoCount = materias.filter(m => (m.definitiva ?? 0) < 3.0 && m.definitiva !== null).length;
 
   const filteredSubjects = materias.filter(sub => {
-    const matchesSearch = (sub.asignatura || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const nombreMateria = sub.asignaturas?.nombre || sub.asignatura || '';
+    const matchesSearch = nombreMateria.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesFilter = activeFilter === 'Todas' || 
       (activeFilter === 'Aprobadas' && (sub.definitiva ?? 0) >= 3.0) ||
       (activeFilter === 'En Riesgo' && (sub.definitiva ?? 0) < 3.0);
@@ -168,29 +171,36 @@ export default function StudentHomeScreen({ route, navigation }) {
         ) : filteredSubjects.length === 0 ? (
           <Text style={styles.emptyStateText}>No se encontraron materias.</Text>
         ) : (
-          filteredSubjects.map((item, index) => (
-            <TouchableOpacity
-              key={item.asignatura_id || index.toString()}
-              activeOpacity={0.8}
-              onPress={() => navigation.navigate('StudentSubjectDetail', { materia: item })}
-            >
-              <View style={styles.subjectCard}>
-                <View style={styles.subjectIcon}>
-                  <Ionicons name="book-outline" size={22} color={COLORS.primary} />
+          filteredSubjects.map((item, index) => {
+            const nombreAsignatura = item.asignaturas?.nombre || item.asignatura || 'Asignatura sin nombre';
+            const nombreProfesor = item.asignaturas?.usuarios?.nombre || item.profesor;
+
+            return (
+              <TouchableOpacity
+                key={item.asignatura_id || index.toString()}
+                activeOpacity={0.8}
+                onPress={() => navigation.navigate('StudentSubjectDetail', { materia: item })}
+              >
+                <View style={styles.subjectCard}>
+                  <View style={styles.subjectIcon}>
+                    <Ionicons name="book-outline" size={22} color={COLORS.primary} />
+                  </View>
+                  <View style={styles.subjectInfo}>
+                    <Text style={styles.subjectName}>{nombreAsignatura}</Text>
+                    {nombreProfesor ? (
+                      <Text style={styles.subjectTeacher}>{nombreProfesor}</Text>
+                    ) : null}
+                  </View>
+                  <View style={styles.gradeContainer}>
+                    <Text style={styles.grade}>
+                      {item.definitiva !== null && item.definitiva !== undefined ? item.definitiva.toFixed(1) : '--'}
+                    </Text>
+                    <Text style={styles.gradeLabel}>NOTA</Text>
+                  </View>
                 </View>
-                <View style={styles.subjectInfo}>
-                  <Text style={styles.subjectName}>{item.asignatura}</Text>
-                  <Text style={styles.subjectTeacher}>{item.profesor || 'Profesor Titular'}</Text>
-                </View>
-                <View style={styles.gradeContainer}>
-                  <Text style={styles.grade}>
-                    {item.definitiva !== null && item.definitiva !== undefined ? item.definitiva.toFixed(1) : '--'}
-                  </Text>
-                  <Text style={styles.gradeLabel}>NOTA</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))
+              </TouchableOpacity>
+            );
+          })
         )}
 
       </ScrollView>

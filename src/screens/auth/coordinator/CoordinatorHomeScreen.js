@@ -39,6 +39,7 @@ export default function CoordinatorHomeScreen({ route, navigation }) {
       setCargando(false);
     }
   };
+
   const handleLogout = () => {
     Alert.alert(
       'Cerrar Sesión',
@@ -49,6 +50,7 @@ export default function CoordinatorHomeScreen({ route, navigation }) {
       ]
     );
   };
+
   const estudiantes = usuarios.filter((u) => u.rol === 'Estudiante');
   const profesoresCount = usuarios.filter((u) => u.rol === 'Profesor').length;
 
@@ -95,15 +97,15 @@ export default function CoordinatorHomeScreen({ route, navigation }) {
         {/* METRICAS SUPERIORES */}
         <View style={styles.statsRow}>
           <View style={[styles.statCard, { backgroundColor: '#E1F5FE', borderColor: '#81D4FA' }]}>
-            <Text style={styles.statNumber}>450</Text>
+            <Text style={styles.statNumber}>{estudiantes.length}</Text>
             <Text style={styles.statLabel}>Estudiantes</Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: '#FFF9C4', borderColor: '#FFD54F' }]}>
-            <Text style={styles.statNumber}>28</Text>
+            <Text style={styles.statNumber}>{profesoresCount}</Text>
             <Text style={styles.statLabel}>Profesores</Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: '#E8F5E9', borderColor: '#A5D6A7' }]}>
-            <Text style={styles.statNumber}>2026-I</Text>
+            <Text style={styles.statNumber}>2026-2</Text>
             <Text style={styles.statLabel}>Período</Text>
           </View>
         </View>

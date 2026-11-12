@@ -19,10 +19,10 @@ export default function StudentSubjectDetailScreen({ route, navigation }) {
         {/* BOTÓN REGRESAR Y TÍTULO */}
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()} activeOpacity={0.7}>
           <Ionicons name="arrow-back" size={22} color={COLORS.primary} />
-          <Text style={styles.backText}>{materia?.asignatura || 'Detalle Materia'}</Text>
+          <Text style={styles.backText}>
+            {materia?.asignaturas?.nombre || materia?.asignatura || 'Detalle Materia'}
+          </Text>
         </TouchableOpacity>
-
-        <Text style={styles.teacherText}>Profesor: {materia?.profesor || 'Dr. Carlos Mendoza'}</Text>
 
         <Text style={styles.sectionTitle}>Desglose de Calificaciones</Text>
 
@@ -67,9 +67,8 @@ export default function StudentSubjectDetailScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F0F3F8' },
   scrollContent: { padding: 20 },
-  backButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 6 },
+  backButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
   backText: { fontSize: 20, fontWeight: '800', color: '#333333', marginLeft: 8 },
-  teacherText: { fontSize: 13, color: '#666666', marginBottom: 24, marginLeft: 30 },
   sectionTitle: { fontSize: 18, fontWeight: '800', color: '#333333', marginBottom: 14 },
   breakdownCard: { backgroundColor: '#FFFFFF', borderRadius: 16, paddingHorizontal: 16, borderWidth: 1, borderColor: '#E2E8F0' },
   gradeRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: '#E2E8F0' },

@@ -24,9 +24,9 @@ export default function ProfessorHomeScreen({ route, navigation }) {
   const [asignaturas, setAsignaturas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState('Todas (3)');
+  const [activeFilter, setActiveFilter] = useState('Todas');
 
-  const filters = ['Todas (3)', 'Pendientes', 'Historial'];
+  const filters = ['Todas', 'Pendientes', 'Historial'];
 
   useEffect(() => {
     cargarAsignaturas();
