@@ -31,15 +31,18 @@ export default function ProfessorSubjectDetailScreen({ route, navigation }) {
     setCargando(true);
     try {
       const data = await obtenerEstudiantesPorAsignaturaBD(asignatura.id);
-      setEstudiantes(data);
+      setEstudiantes(data || []);
 
       let initialGrades = {};
-      data.forEach((est) => {
-        initialGrades[est.estudiante_id] = est.nota2 ? est.nota2.toString() : '0';
-      });
+      if (Array.isArray(data)) {
+        data.forEach((est) => {
+          initialGrades[est.estudiante_id] = est.nota2 ? est.nota2.toString() : '0';
+        });
+      }
       setGrades(initialGrades);
     } catch (e) {
       console.error(e);
+      Alert.alert('Error', 'No se pudieron cargar los estudiantes.');
     } finally {
       setCargando(false);
     }
@@ -49,15 +52,17 @@ export default function ProfessorSubjectDetailScreen({ route, navigation }) {
     try {
       for (const est of estudiantes) {
         const nota2Ingresada = grades[est.estudiante_id] || '0';
-        await guardarOActualizarNotaBD(
-          est.estudiante_id,
-          asignatura.id,
-          est.nota1 || 0,
-          nota2Ingresada,
-          est.nota3 || 0
-        );
+        
+        // Llamada compatible con Supabase
+        await guardarOActualizarNotaBD({
+          estudiante_id: est.estudiante_id,
+          asignatura_id: asignatura.id,
+          nota1: est.nota1 || 0,
+          nota2: parseFloat(nota2Ingresada) || 0,
+          nota3: est.nota3 || 0
+        });
       }
-      Alert.alert('Éxito', 'Calificaciones Guardadas en SQLite');
+      Alert.alert('Éxito', 'Calificaciones guardadas en Supabase');
       navigation.goBack();
     } catch (e) {
       console.error(e);
@@ -89,8 +94,8 @@ export default function ProfessorSubjectDetailScreen({ route, navigation }) {
           estudiantes.map((student) => (
             <View key={student.estudiante_id} style={styles.studentGradeRow}>
               <View style={styles.studentInfo}>
-                <Text style={styles.studentName}>{student.nombre}</Text>
-                <Text style={styles.mutedText}>{student.documento}</Text>
+                <Text style={styles.studentName}>{student.nombre || 'Estudiante'}</Text>
+                <Text style={styles.mutedText}>{student.documento || student.email || ''}</Text>
               </View>
               <TextInput
                 style={styles.gradeInput}
@@ -99,7 +104,7 @@ export default function ProfessorSubjectDetailScreen({ route, navigation }) {
                   setGrades({ ...grades, [student.estudiante_id]: val.replace(/[^0-9.]/g, '') })
                 }
                 keyboardType="decimal-pad"
-                placeholder="0-20"
+                placeholder="0-5"
                 placeholderTextColor="#666666"
                 maxLength={5}
               />

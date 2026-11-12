@@ -13,7 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/theme';
-import { obtenerCalificacionesEstudianteBD } from '../../../database/database';
+import { obtenerNotasEstudianteBD } from '../../../database/database';
 
 export default function StudentHomeScreen({ route, navigation }) {
   const user = route.params?.user || { nombre: 'Carlos', email: 'carlos.garcia@est.univ.edu', carrera: 'Ingeniería Mecánica', semestre: '6to Semestre' };
@@ -31,7 +31,7 @@ export default function StudentHomeScreen({ route, navigation }) {
   const cargarNotas = async () => {
     setCargando(true);
     try {
-      const data = await obtenerCalificacionesEstudianteBD(user.email);
+      const data = await obtenerNotasEstudianteBD(user.id);
       setMaterias(data);
     } catch (e) {
       console.error(e);
@@ -106,7 +106,7 @@ export default function StudentHomeScreen({ route, navigation }) {
           </View>
           <View style={styles.averageInfo}>
             <Text style={styles.averageTitle}>Promedio General</Text>
-            <Text style={styles.averageSubtitle}>Escala de calificación sobre 20</Text>
+            <Text style={styles.averageSubtitle}>Escala de calificación sobre 5</Text>
             <View style={styles.badgeSuccess}>
               <Ionicons name="checkmark-circle-outline" size={14} color={COLORS.textPrimary} style={{ marginRight: 4 }} />
               <Text style={styles.badgeSuccessText}>

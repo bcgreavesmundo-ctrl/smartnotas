@@ -12,8 +12,12 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/theme';
+import { obtenerAsignaturasBD } from '../../../database/database';
+// Cambiar la importación actual por:
 import { obtenerAsignaturasProfesorBD } from '../../../database/database';
+import { guardarOActualizarNotaBD } from '../../../database/database';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function ProfessorHomeScreen({ route, navigation }) {
   const user = route.params?.user || { id: 'u2', nombre: 'Dr. Carlos Mendoza' };
@@ -29,16 +33,17 @@ export default function ProfessorHomeScreen({ route, navigation }) {
   }, []);
 
   const cargarAsignaturas = async () => {
-    setCargando(true);
-    try {
-      const data = await obtenerAsignaturasProfesorBD(user.id);
-      setAsignaturas(data);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setCargando(false);
-    }
-  };
+  setCargando(true);
+  try {
+    // Se envía el ID del usuario autenticado (user.id)
+    const data = await obtenerAsignaturasProfesorBD(user.id);
+    setAsignaturas(data);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setCargando(false);
+  }
+};
 
   // Solicita confirmación antes de cerrar la sesión del profesor.
   const handleLogout = () => {
@@ -55,6 +60,36 @@ export default function ProfessorHomeScreen({ route, navigation }) {
       ]
     );
   };
+
+  // Dentro de tu componente, agrega una función para solicitar notas al hacer clic en el botón:
+const handleRegistrarNota = (materia) => {
+  Alert.prompt(
+    `Calificar: ${materia.nombre}`,
+    'Ingresa las 3 notas separadas por comas (ejemplo: 4.5, 3.8, 5.0):',
+    [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Guardar',
+        onPress: async (texto) => {
+          if (!texto) return;
+          const notas = texto.split(',').map(n => parseFloat(n.trim()));
+          try {
+            await guardarOActualizarNotaBD({
+              estudiante_id: 'COLOCA_EL_UUID_DEL_ESTUDIANTE', // o la selección de estudiante
+              asignatura_id: materia.id,
+              nota1: notas[0] || 0,
+              nota2: notas[1] || 0,
+              nota3: notas[2] || 0
+            });
+            Alert.alert('Éxito', 'Notas registradas en Supabase');
+          } catch (e) {
+            Alert.alert('Error', e.message);
+          }
+        }
+      }
+    ]
+  );
+};
 
   const filteredSubjects = asignaturas.filter(sub => {
     const matchesSearch = (sub.nombre || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
